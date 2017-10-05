@@ -1,9 +1,9 @@
 const allConfig = {
 	development: {
-		API_BASE_URL: 'https://api.github.com'
+		API_BASE_URL: 'https://ifd-api.herokuapp.com'
 	},
 	production: {
-		API_BASE_URL: 'https://api.github.com'
+		API_BASE_URL: 'https://ifd-api.herokuapp.com'
 	}
 };
 

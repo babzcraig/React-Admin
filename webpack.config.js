@@ -10,8 +10,11 @@ const extractSCSS = new ExtractTextPlugin('[name].styles.css');
 const BUILD_DIR = path.resolve(__dirname, 'build');
 const SRC_DIR = path.resolve(__dirname, 'src');
 
-console.log('BUILD_DIR', BUILD_DIR);
-console.log('SRC_DIR', SRC_DIR);
+const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
+
+const GLOBALS = {
+  'process.env.NODE_ENV': JSON.stringify(NODE_ENV)
+};
 
 module.exports = (env = {}) => {
   return {
@@ -91,6 +94,7 @@ module.exports = (env = {}) => {
         }]
     },
     plugins: [
+      new webpack.DefinePlugin(GLOBALS),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.optimize.UglifyJsPlugin({sourceMap: true}),
       new webpack.NamedModulesPlugin(),

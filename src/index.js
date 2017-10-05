@@ -1,6 +1,11 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
-import {HashRouter, Route, Switch} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+
+import configureStore from './store/configureStore';
+import initialState from './reducers/initialState';
 
 // Styles
 // Import Font Awesome Icons Set
@@ -21,14 +26,20 @@ import Register from './views/Pages/Register/'
 import Page404 from './views/Pages/Page404/'
 import Page500 from './views/Pages/Page500/'
 
+const store = configureStore({});
+import {config} from './config';
+console.log(process.env.NODE_ENV);
+
 ReactDOM.render((
-  <HashRouter>
-    <Switch>
-      <Route exact path="/login" name="Login Page" component={Login}/>
-      <Route exact path="/register" name="Register Page" component={Register}/>
-      <Route exact path="/404" name="Page 404" component={Page404}/>
-      <Route exact path="/500" name="Page 500" component={Page500}/>
-      <Route path="/" name="Home" component={Full}/>
-    </Switch>
-  </HashRouter>
+  <Provider store={store}>
+    <HashRouter>
+      <Switch>
+        <Route exact path="/login" name="Login Page" component={Login}/>
+        <Route exact path="/register" name="Register Page" component={Register}/>
+        <Route exact path="/404" name="Page 404" component={Page404}/>
+        <Route exact path="/500" name="Page 500" component={Page500}/>
+        <Route path="/" name="Home" component={Login}/>
+      </Switch>
+    </HashRouter>
+  </Provider>
 ), document.getElementById('root'));

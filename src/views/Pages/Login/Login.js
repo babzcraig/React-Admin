@@ -1,9 +1,47 @@
-import React, {Component} from "react";
-import {Container, Row, Col, CardGroup, Card, CardBlock, Button, Input, InputGroup, InputGroupAddon} from "reactstrap";
+import React, { Component } from "react";
+import { connect } from 'react-redux';
+
+import { Container, 
+  Row, 
+  Col, 
+  CardGroup, 
+  Card, 
+  CardBlock, 
+  Button, 
+  Input, 
+  InputGroup, 
+  InputGroupAddon } from "reactstrap";
+import { validateNull } from 'form-fields-validator';
+
+import { loginUser } from '../../../actions/UserActions';
 
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: ''
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleLogin() {
+    if (validateNull(this.state)) {
+      const { email, password } = this.state;
+      this.props.loginUser(email, password)
+    }
+  }
+
   render() {
+    console.log(this.props);
+    console.log(validateNull(this.state))
     return (
       <div className="app flex-row align-items-center">
         <Container>
@@ -16,15 +54,26 @@ class Login extends Component {
                     <p className="text-muted">Sign In to your account</p>
                     <InputGroup className="mb-3">
                       <InputGroupAddon><i className="icon-user"></i></InputGroupAddon>
-                      <Input type="text" placeholder="Username"/>
+                      <Input type="text" 
+                        placeholder="Email Address" 
+                        name="email"
+                        onChange={this.handleChange}
+                        value={this.state.email} />
                     </InputGroup>
                     <InputGroup className="mb-4">
                       <InputGroupAddon><i className="icon-lock"></i></InputGroupAddon>
-                      <Input type="password" placeholder="Password"/>
+                      <Input type="password" 
+                        placeholder="Password"
+                        name="password"
+                        value={this.state.password}
+                        onChange={this.handleChange} />
                     </InputGroup>
                     <Row>
                       <Col xs="6">
-                        <Button color="primary" className="px-4">Login</Button>
+                        <Button 
+                          color="primary" 
+                          className="px-4"
+                          onClick={this.handleLogin} >Login</Button>
                       </Col>
                       <Col xs="6" className="text-right">
                         <Button color="link" className="px-0">Forgot password?</Button>
@@ -51,4 +100,16 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.activeUser,
+  };
+}
+
+export const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (email, password) => dispatch(loginUser(email, password)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
